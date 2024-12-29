@@ -1,5 +1,6 @@
 mod id;
 mod registration;
+pub mod request;
 mod response;
 mod structs;
 
