@@ -8,6 +8,7 @@ use global_common::{
 };
 use reqwest::Client;
 
+const MAIN_API_ADDRESS: &'static str = "http://127.0.0.1:5998";
 const ADDON_ADDRESS: &'static str = "http://127.0.0.1:5950";
 
 static REQ_CLIENT: LazyLock<Client> = LazyLock::new(Client::new);
@@ -19,20 +20,31 @@ pub async fn query_cms_rows(
 ) -> Result<ListResponse<CmsRowResponse>> {
     match uuid {
         UuidType::Site(uuid) => {
-            // let res = REQ_CLIENT
-            //     .get("http://localhost:5941/instance/query")
-            //     .send()
-            //     .await?;
-
-            // Ok(Json(res.json().await?))
-
-            todo!("Site UUID Query")
-        }
-
-        UuidType::Addon(addon_uuid) => {
             let resp = REQ_CLIENT
                 .get(format!(
-                    "{ADDON_ADDRESS}/addon/{addon_uuid}/schema/{collection}/query?{}",
+                    "{MAIN_API_ADDRESS}/cms/s:{uuid}/schema/{collection}/query?{}",
+                    serde_qs::to_string(&query).unwrap()
+                ))
+                .send()
+                .await?
+                .json::<WrappingResponse<ListResponse<CmsRowResponse>>>()
+                .await?;
+
+            match resp {
+                WrappingResponse::Resp(resp) => {
+                    return Ok(resp);
+                }
+
+                WrappingResponse::Error(v) => {
+                    return Err(eyre::eyre!("API Response Error: {}", v.description))?;
+                }
+            }
+        }
+
+        UuidType::Addon(uuid) => {
+            let resp = REQ_CLIENT
+                .get(format!(
+                    "{ADDON_ADDRESS}/addon/{uuid}/schema/{collection}/query?{}",
                     serde_qs::to_string(&query).unwrap()
                 ))
                 .send()
