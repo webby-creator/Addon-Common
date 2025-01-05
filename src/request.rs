@@ -1,6 +1,6 @@
-use std::sync::LazyLock;
+use std::{collections::HashMap, sync::LazyLock};
 
-use api::{CmsRowResponse, ListResponse, WrappingResponse};
+use api::{CmsRowResponse, ListResponse, SimpleValue, WrappingResponse};
 use eyre::Result;
 use global_common::{
     request::CmsQuery,
@@ -100,6 +100,71 @@ pub async fn get_cms_row_by_id(
                 .send()
                 .await?
                 .json::<WrappingResponse<CmsRowResponse>>()
+                .await?;
+
+            match resp {
+                WrappingResponse::Resp(resp) => {
+                    return Ok(resp);
+                }
+
+                WrappingResponse::Error(v) => {
+                    return Err(eyre::eyre!("Addon Response Error: {}", v.description))?;
+                }
+            }
+        }
+    }
+}
+
+pub async fn import_data_row(
+    uuid: UuidType,
+    collection: CollectionName,
+    rows: HashMap<String, SimpleValue>,
+) -> Result<String> {
+    import_data_rows(
+        uuid,
+        collection,
+        rows.into_iter().map(|(k, v)| (k, vec![v])).collect(),
+    )
+    .await
+}
+
+pub async fn import_data_rows(
+    uuid: UuidType,
+    collection: CollectionName,
+    rows: HashMap<String, Vec<SimpleValue>>,
+) -> Result<String> {
+    match uuid {
+        UuidType::Site(uuid) => {
+            let resp = REQ_CLIENT
+                .post(format!(
+                    "{MAIN_API_ADDRESS}/cms/s:{uuid}/schema/{collection}/import",
+                ))
+                .json(&rows)
+                .send()
+                .await?
+                .json::<WrappingResponse<String>>()
+                .await?;
+
+            match resp {
+                WrappingResponse::Resp(resp) => {
+                    return Ok(resp);
+                }
+
+                WrappingResponse::Error(v) => {
+                    return Err(eyre::eyre!("API Response Error: {}", v.description))?;
+                }
+            }
+        }
+
+        UuidType::Addon(uuid) => {
+            let resp = REQ_CLIENT
+                .post(format!(
+                    "{ADDON_ADDRESS}/addon/{uuid}/schema/{collection}/import",
+                ))
+                .json(&rows)
+                .send()
+                .await?
+                .json::<WrappingResponse<String>>()
                 .await?;
 
             match resp {
