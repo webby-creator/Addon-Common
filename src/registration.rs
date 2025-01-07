@@ -8,7 +8,7 @@ use crate::{
 
 // Install
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RegisterNewJson {
     pub instance_id: Uuid,

@@ -4,6 +4,7 @@ use std::{
     str::FromStr,
 };
 
+use global_common::uuid::UuidType;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Error as UuidError, Uuid};
 
@@ -87,3 +88,9 @@ macro_rules! create_id {
 // External Member
 create_id!(WebsiteUuid, Uuid, UuidError);
 create_id!(MemberUuid, Uuid, UuidError);
+
+impl Into<UuidType> for WebsiteUuid {
+    fn into(self) -> UuidType {
+        UuidType::Site(*self)
+    }
+}
