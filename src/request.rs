@@ -13,6 +13,7 @@ use reqwest::{
     Client, ClientBuilder, IntoUrl,
 };
 use serde::{de::DeserializeOwned, Serialize};
+use uuid::Uuid;
 
 use crate::{get_call_token, WebsiteUuid};
 
@@ -316,6 +317,28 @@ pub async fn create_website_form(
     match resp {
         WrappingResponse::Resp(resp) => {
             return Ok(resp);
+        }
+
+        WrappingResponse::Error(v) => {
+            return Err(eyre::eyre!("API Response Error: {}", v.description))?;
+        }
+    }
+}
+
+pub async fn create_website_form_action(
+    website_id: WebsiteUuid,
+    form_id: Uuid,
+    action: FormAction,
+) -> Result<()> {
+    let resp = post_json_response::<String>(
+        format!("{MAIN_API_ADDRESS}/form/{website_id}/{form_id}/actions"),
+        &action,
+    )
+    .await?;
+
+    match resp {
+        WrappingResponse::Resp(_resp) => {
+            return Ok(());
         }
 
         WrappingResponse::Error(v) => {
