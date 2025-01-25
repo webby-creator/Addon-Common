@@ -85,12 +85,14 @@ macro_rules! create_id {
     };
 }
 
+// TODO: Remove
+
 // External Member
 create_id!(WebsiteUuid, Uuid, UuidError);
 create_id!(MemberUuid, Uuid, UuidError);
 
 impl Into<UuidType> for WebsiteUuid {
     fn into(self) -> UuidType {
-        UuidType::Site(*self)
+        UuidType::Site(self.0.into())
     }
 }

@@ -5,7 +5,7 @@ edition = "2021"
 
 [features]
 default = []
-sqlx = ["dep:sqlx"]
+sqlx = ["dep:sqlx", "global-common/sqlx", "api/sqlx"]
 
 [dependencies]
 api = { path = "../website/crates/api" }

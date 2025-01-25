@@ -5,6 +5,7 @@ use api::{
 };
 use eyre::Result;
 use global_common::{
+    id::FormPublicId,
     request::{CmsCreate, CmsCreateDataColumnTag, CmsQuery},
     uuid::{CollectionName, UuidType},
 };
@@ -327,7 +328,7 @@ pub async fn create_website_form(
 
 pub async fn create_website_form_action(
     website_id: WebsiteUuid,
-    form_id: Uuid,
+    form_id: FormPublicId,
     action: FormAction,
 ) -> Result<()> {
     let resp = post_json_response::<String>(
