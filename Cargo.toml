@@ -9,7 +9,7 @@ sqlx = ["dep:sqlx", "global-common/sqlx", "api/sqlx"]
 
 [dependencies]
 api = { path = "../website/crates/api" }
-global-common = { path = "../global-common" }
+global-common = { git = "https://github.com/webby-creator/Global-Common", version = "0.1.0" }
 
 sqlx = { version = "0.7", optional = true }
 
