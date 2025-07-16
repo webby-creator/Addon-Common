@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
+use uuid::Uuid;
 
-use crate::MemberUuid;
+use crate::{MemberUuid, WebsiteUuid};
 
 // TODO: Create Permissions Macro to convert Full Struct -> Partial Struct
 
@@ -26,7 +27,7 @@ pub struct MemberPartial {
 #[derive(Serialize, Deserialize)]
 pub struct WebsitePartial {
     // pub owner_uuid: MemberUuid,
-    pub public_id: String,
+    pub public_id: WebsiteUuid,
 
     pub name: String,
     /// If URL starts with '/' it is relative to the domain
