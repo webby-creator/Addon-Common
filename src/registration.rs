@@ -1,5 +1,5 @@
+use global_common::id::AddonInstanceUuid;
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 use crate::{
     structs::{MemberPartial, WebsitePartial},
@@ -11,7 +11,8 @@ use crate::{
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RegisterNewJson {
-    pub instance_id: Uuid,
+    pub instance_id: AddonInstanceUuid,
+    pub version: String,
 
     pub website_id: WebsiteUuid,
     pub owner_id: MemberUuid,
