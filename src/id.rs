@@ -91,6 +91,8 @@ macro_rules! create_id {
 create_id!(WebsiteUuid, Uuid, UuidError);
 create_id!(MemberUuid, Uuid, UuidError);
 
+pub use global_common::id::AddonInstanceUuid;
+
 impl Into<UuidType> for WebsiteUuid {
     fn into(self) -> UuidType {
         UuidType::Site(self.0.into())
