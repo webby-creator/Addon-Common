@@ -1,5 +1,5 @@
-use global_common::id::AddonInstanceUuid;
 use serde::{Deserialize, Serialize};
+use webby_global_common::id::AddonInstanceUuid;
 
 use crate::{
     structs::{MemberPartial, WebsitePartial},

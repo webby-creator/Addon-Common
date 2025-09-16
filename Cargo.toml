@@ -1,15 +1,16 @@
 [package]
-name = "addon-common"
+name = "webby-addon-common"
 version = "0.1.0"
 edition = "2021"
+publish = ["tasty"]
 
 [features]
 default = []
-sqlx = ["dep:sqlx", "global-common/sqlx", "api/sqlx"]
+sqlx = ["dep:sqlx", "webby-global-common/sqlx", "webby-api/sqlx"]
 
 [dependencies]
-api = { path = "../website/crates/api" }
-global-common = { git = "https://github.com/webby-creator/Global-Common", version = "0.1.0" }
+webby-api = { version = "0.1.0", registry = "tasty" }
+webby-global-common = { version = "0.1.0", registry = "tasty" }
 
 sqlx = { version = "0.7", optional = true }
 
@@ -21,8 +22,8 @@ serde_json = "1.0"
 
 eyre = "0.6"
 log = "0.4"
-thiserror = "1.0"
+thiserror = "2.0"
 url = "2.5"
-uuid = { version = "1.10", features = ["serde"] }
+uuid = { version = "1.18", features = ["serde"] }
 time = { version = "0.3", features = ["serde-human-readable", "macros"] }
-reqwest = { version = "0.11", features = ["json"] }
+reqwest = { version = "0.12", features = ["json"] }

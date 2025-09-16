@@ -4,9 +4,9 @@ use std::{
     str::FromStr,
 };
 
-use global_common::uuid::UuidType;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Error as UuidError, Uuid};
+use webby_global_common::uuid::UuidType;
 
 macro_rules! create_id {
     ($name:ident, $type_of:ident, $err:ident) => {
@@ -91,7 +91,7 @@ macro_rules! create_id {
 create_id!(WebsiteUuid, Uuid, UuidError);
 create_id!(MemberUuid, Uuid, UuidError);
 
-pub use global_common::id::AddonInstanceUuid;
+pub use webby_global_common::id::AddonInstanceUuid;
 
 impl Into<UuidType> for WebsiteUuid {
     fn into(self) -> UuidType {
